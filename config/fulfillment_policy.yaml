@@ -1,0 +1,14 @@
+# Deterministic fulfillment routing policy (RET-C2-267)
+# Loaded by FulfillmentPolicyNode (inner subgraph). Policy lookup is a config
+# tool, NOT a VectorRAG dependency (Engineer Review §2-4 corrected finding).
+
+routing:
+  # Preferred source-channel order when multiple channels can fulfill the order
+  # (WMS = central warehouse, POS = store stock, EC = e-commerce fulfillment center).
+  channel_priority: ["WMS", "POS", "EC"]
+
+hitl:
+  # Orders at/above EITHER threshold require human review before the
+  # fulfillment instruction is emitted (Engineer Review §4 Step 5 HITLGateNode).
+  amount_threshold_jpy: 500000
+  volume_threshold_units: 100
