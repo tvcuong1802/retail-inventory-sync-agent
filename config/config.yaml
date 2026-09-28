@@ -1,0 +1,28 @@
+# config/config.yaml — runtime parameters.
+#
+# the framework contract: config/agent.yaml is the STATIC manifest; every runtime-tunable
+# parameter lives here. The `config:` block the manifest used to carry is reproduced
+# below, because the root-level AgentRegistry schema has no place for it.
+
+max_retry: 3
+
+# Domain settings, read by src/graph/graph.py. Relative paths resolve against the
+# repository root, not the working directory: a Pod does not start from the project
+# root, and a bare relative path silently loads nothing.
+# At the ROOT, not under domain_config. AgentBaseGraph reads `memory_enabled` and
+# `hitl` from its own config; nested under a block the framework never looks at, they are
+# declared and inert -- the checkpointer is never built and hitl.max_hitl never applies,
+# while the file reads as if HITL were configured (N-166).
+memory_enabled: true
+hitl:
+  enabled: true
+  max_hitl: 8
+
+domain_config: {}
+
+# Forwarded to the Azure client by build_llm_client(). Declaring them without
+# forwarding them is worse than not declaring them.
+llm:
+  max_tokens: 1024
+  temperature: 0.2
+  timeout: 60
